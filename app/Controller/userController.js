@@ -12,10 +12,28 @@ let signup = (req, res) => {
     });
 }
 
+let login = (req, res) => {
+    userModel.findOne({ username: req.body.username }).then((user) => {
+        if (user) {
+            if (user.password == req.body.password) {
+                res.status(200).json({ message: "User logged in successfully!", user: user });
+            } else {
+                res.status(500).json({ message: "Incorrect password!" });
+            }
+        } else {
+            res.status(500).json({ message: "User not found!" });
+        }
+    }).catch((err) => {
+        res.status(500).json({ message: "Error logging in user!", error: err });
+    });
+}
 
 let asd = (req, res) => {
     res.send("Hello Meow User!");
 }
 
-module.exports  = signup;
+module.exports = {
+    signup,
+    login   
+};
 
